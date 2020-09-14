@@ -1,5 +1,8 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const jwtSecret = 'SECRETAZO2020';
 
 const url = 'mongodb://localhost:27017';
 const dbName = 'batidorafc';
@@ -15,22 +18,22 @@ export default (req, res) => {
             assert.equal(null, error);
             console.log('Conectado a Mongo');
             const db = client.db(dbName);
-            const collection = db.collection('category');
+            const collection = db.collection('zone');
 
-            collection.find({}).toArray((error, categories) => {
+            collection.find({}).toArray((error, zones) => {
                 if (error) {
                     res.status(500).json({
                         error: true,
-                        message: 'Error al buscar las categorias..',
+                        message: 'Error al buscar las zonas..',
                     });
                     return;
                 }
-                if(categories){
-                    res.status(200).json(categories);
+                if(zones){
+                    res.status(200).json( zones );
                 }else{
                     res.status(500).json({
                         error: true,
-                        message: 'Error al buscar las categorias..',
+                        message: 'Error al buscar las zonas..',
                     });
                 }
             });

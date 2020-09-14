@@ -1,0 +1,20 @@
+.white_button, .black_button {
+    padding: 9px 25px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+.white_button {
+    background-color: white;
+}
+
+.black_button {
+    background-color: black;
+    color: white;
+}
+
+.white_button:hover, .black_button:hover{
+    background-color: rgba(184, 186, 189, 0.8);
+}

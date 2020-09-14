@@ -27,7 +27,7 @@ export default function SignUp() {
 				}
 				if (data && data.token) {
 					cookie.set('token', data.token, { expires: 2 });
-					Router.push('/');
+					Router.push('/home');
 				}
 			});
 	};
@@ -56,13 +56,6 @@ export default function SignUp() {
 					type="password"
 				/>
 			</label>
-
-			<label for="teams">Elegi un equipo</label>
-			<select name="teams" id="teams">
-				<option value="batidora">Batidora FC</option>
-				<option value="sanata">Sanata FC</option>
-				<option value="ldbc">LBDC FC</option>
-			</select>
 
 			<br />
 

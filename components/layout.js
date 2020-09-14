@@ -1,22 +1,28 @@
 import Navbar from './navbar';
 import cookie from 'js-cookie';
+import Head from 'next/head';
+import { useState, useEffect } from 'react';
 
-export default function Layout({children}) {
+export default function Layout({ children }) {
 
-    const isLoggedIn = () => {
-        console.log(cookie.get('token'));
-        return cookie.get('token');
-    }
+    const [isLogged, setIsLogged] = useState(false);
+
+    useEffect(() => setIsLogged(cookie.get('token')));
 
     return (
         <>
-        {
-            isLoggedIn() ? 
-            <Navbar />
-            :
-            <></>
-        }
-        {children}
+            <Head>
+                <title>Batidora FC</title>
+                <link rel="icon" href="/favicon.ico" />
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            </Head>
+            {
+                isLogged ?
+                    <Navbar />
+                    :
+                    null
+            }
+            {children}
         </>
     )
 }

@@ -15,22 +15,22 @@ export default (req, res) => {
             assert.equal(null, error);
             console.log('Conectado a Mongo');
             const db = client.db(dbName);
-            const collection = db.collection('category');
+            const collection = db.collection('team');
 
-            collection.find({}).toArray((error, categories) => {
+            collection.find({}).toArray((error, team) => {
                 if (error) {
                     res.status(500).json({
                         error: true,
-                        message: 'Error al buscar las categorias..',
+                        message: 'Error al buscar el equipo..',
                     });
                     return;
                 }
-                if(categories){
-                    res.status(200).json(categories);
+                if(team){
+                    res.status(200).json( team );
                 }else{
                     res.status(500).json({
                         error: true,
-                        message: 'Error al buscar las categorias..',
+                        message: 'Error al buscar el equipo..',
                     });
                 }
             });

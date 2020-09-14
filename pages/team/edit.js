@@ -1,62 +1,114 @@
-import styles from '../../styles/Home.module.css';
-import { useState } from 'react';
+import styles from '../../styles/EditTeam.module.css';
+import { useState, useEffect } from 'react';
+import { Button } from '../../components/button';
+import moment from "moment";
 
-export default function EditTeam({categories}) {
+export default function EditTeam({ categories, zones, teamData }) {
 	const [saveError, setSaveError] = useState('');
 	const [name, setName] = useState('');
-	const [foundation, setFoundation] = useState('');
+	const [creation, setCreation] = useState('');
 	const [zone, setZone] = useState('');
 	const [category, setCategory] = useState('');
+	
+	useEffect(() => {
+		if (teamData) {
+			setName(teamData[0].name);
+			setCreation(moment(teamData[0].creation).format("yyyy-MM-DD"));
+			setZone(teamData[0].zoneId);
+			setCategory(teamData[0].categoryId);
+		}
+	}, [])
 
-	const handleSubmit = (e) => {};
+
+	const handleSubmit = (e) => { 
+		e.preventDefault();
+		let editTeam = {
+			id: teamData[0]._id,
+			name: name,
+			creation: creation,
+			zoneId: zone,
+			categoryId: category
+		};
+
+		saveData(editTeam);
+	};
+
+	const saveData = (editTeam) => {
+		fetch('/api/team/edit', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ editTeam	}),
+		})
+		.then(r => r.json())
+		.then((data) => {
+			if (data && data.error){
+				setSaveError(data.message);
+			}
+
+			if(data){
+				console.log(data);
+			}
+		})
+	}
 
 	return (
 		<div className={styles.container}>
-			<pre>{JSON.stringify(category, null, 2)}</pre>
 			<section>
 				<h3 className={styles.title}>Editar equipo</h3>
 				<div className={styles.grid}>
 					<form onSubmit={handleSubmit}>
-						<input
-							placeholder="Nombre"
-							name="name"
-							type="text"
-							value={name}
-							onChange={(e) => {
-								setName(e.target.value);
-							}}
-						></input>
-						<label htmlFor="foundation">
+
+						<label htmlFor='name' className={styles.label}>
+							Nombre
+							<input
+								name="name"
+								type="text"
+								value={name}
+								onChange={(e) => {
+									setName(e.target.value);
+								}}
+							></input>
+						</label>
+
+						<label htmlFor="creation" className={styles.label}>
 							Fecha de creacion
 							<input
-								name="foundation"
+								name="creation"
 								type="date"
-								value={foundation}
+								value={creation}
+								className={styles.date_picker}
 								onChange={(e) => {
-									setFoundation(e.target.value);
+									setCreation(e.target.value);
 								}}
 							></input>
 						</label>
-						<label htmlFor="zone">
+
+						<label htmlFor="zone" className={styles.label}>
 							Zona
-							<input
-								name="zone"
-								type="text"
-								value={zone}
-								onChange={(e) => {
-									setZone(e.target.value);
-								}}
-							></input>
-						</label>
-						<label htmlFor="category">
-							Categoria
-							<select id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
-								{categories.map(c => {
-									return(<option key={c._id} value={c._id}>{c.name}</option>)
+							<br />
+							<select id="zone" value={zone} onChange={(e) => setZone(e.target.value)}>
+								{zones.map(z => {
+									return (<option key={z._id} value={z._id}>{z.name}</option>)
 								})}
 							</select>
 						</label>
-						<input type="submit" value="Enviar"></input>
+
+						<label htmlFor="category" className={styles.label}>
+							Categoria
+							<br />
+							<select id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
+								{categories.map(c => {
+									return (<option key={c._id} value={c._id}>{c.name}</option>)
+								})}
+							</select>
+						</label>
+
+						<div className={styles.button_container}>
+							<Button color='black' text='Enviar' click={handleSubmit} />
+						</div>
+
 						{saveError && (
 							<p style={{ color: 'red' }}>{saveError}</p>
 						)}
@@ -68,12 +120,18 @@ export default function EditTeam({categories}) {
 }
 
 export async function getStaticProps() {
-	const res = await fetch('http://localhost:3000/api/categories')
-	const data = await res.json();
-	
+
+	const [categories, zones, teamData] = await Promise.all([
+		fetch('http://localhost:3000/api/categories').then(res => res.json()),
+		fetch('http://localhost:3000/api/zones').then(res => res.json()),
+		fetch('http://localhost:3000/api/team/info').then(res => res.json())
+	]);
+
 	return {
-	  props: {		
-		  categories: data.categories
-	  }
+		props: {
+			categories: categories,
+			zones: zones,
+			teamData: teamData
+		}
 	}
-  }
+}
