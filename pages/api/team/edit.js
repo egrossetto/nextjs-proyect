@@ -13,17 +13,17 @@ const client = new MongoClient(url, {
 export default (req, res) => {
     if(req.method === 'POST'){
         try {
-			assert.notEqual(null, req.body.editTeam.name, 'Ingrese nombre');
-            assert.notEqual(null, req.body.editTeam.creation, 'Ingrese fecha de creacion');
-            assert.notEqual(null, req.body.editTeam.categoryId, 'Seleccione una categoria');
-            assert.notEqual(null, req.body.editTeam.zoneId, 'Seleccione una zona');
+			assert.notStrictEqual(null, req.body.editTeam.name, 'Ingrese nombre');
+            assert.notStrictEqual(null, req.body.editTeam.creation, 'Ingrese fecha de creacion');
+            assert.notStrictEqual(null, req.body.editTeam.categoryId, 'Seleccione una categoria');
+            assert.notStrictEqual(null, req.body.editTeam.zoneId, 'Seleccione una zona');
 		} catch (error) {
             res.status(403).send(error.message);
             return;
         }
         
         client.connect((error) => {
-            assert.equal(null, error);
+            assert.strictEqual(null, error);
 
             const db = client.db(dbName);
         
@@ -45,8 +45,6 @@ export default (req, res) => {
                     zoneId: zoneId
                 }},
                 (error, result) => {
-                    console.log('error:' + JSON.stringify(error))
-                    console.log('res:' + JSON.stringify(result))
                     if(error){
                         res.status(403).json({ error: true, message: error.message });
                         return;

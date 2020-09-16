@@ -19,19 +19,19 @@ export default function Navbar() {
                 </Link>
             </div>
             <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-                <div className="text-sm lg:flex-grow">
+                <div className="text-sm">
                     <Link href='/team'>
-                        <a className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400 mr-4">
+                        <a className="block md:mt-4 inline-block mt-0 text-white hover:text-gray-400 mr-4">
                             Equipo
                         </a>
                     </Link>
                     <Link href='/'>
-                        <a className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400 mr-4">
+                        <a className="block md:mt-4 inline-block mt-0 text-white hover:text-gray-400 mr-4">
                             Fixture
                         </a>
                     </Link>
                     <Link href='/'>
-                        <a className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400">
+                        <a className="block md:mt-4 inline-block mt-0 text-white hover:text-gray-400">
                             Jugadores
                         </a>
                     </Link>

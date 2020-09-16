@@ -12,8 +12,7 @@ const client = new MongoClient(url, {
 export default (req, res) => {
     if (req.method === 'GET') {
         client.connect((error) => {
-            assert.equal(null, error);
-            console.log('Conectado a Mongo');
+            assert.strictEqual(null, error);
             const db = client.db(dbName);
             const collection = db.collection('team');
 

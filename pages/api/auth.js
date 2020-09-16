@@ -14,12 +14,12 @@ const client = new MongoClient(url, {
 });
 
 const findUser = (db, dni, callback) => {
-	const collection = db.collection('user');
+	const collection = db.collection('users');
 	collection.findOne({ dni }, callback);
 };
 
 const authUser = (db, dni, password, hash, callback) => {
-	const collection = db.collection('user');
+	const collection = db.collection('users');
 	bcrypt.compare(password, hash, callback);
 };
 
@@ -27,15 +27,15 @@ export default (req, res) => {
 	if (req.method === 'POST') {
 		//Logeamos!
 		try {
-			assert.notEqual(null, req.body.dni, 'Ingrese DNI');
-			assert.notEqual(null, req.body.password, 'Ingrese su contraseña');
+			assert.notStrictEqual(null, req.body.dni, 'Ingrese DNI');
+			assert.notStrictEqual(null, req.body.password, 'Ingrese su contraseña');
 		} catch (error) {
 			res.status(403).send(error.message);
 		}
 
 		client.connect((error) => {
-			assert.equal(null, error);
-			console.log('Conectados en Mongo.');
+			assert.strictEqual(null, error);
+			
 			const db = client.db(dbName);
 			const dni = req.body.dni;
 			const password = req.body.password;
